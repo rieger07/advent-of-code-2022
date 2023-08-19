@@ -6,14 +6,14 @@ with open("day3/input.in") as f:
 
 lookup = dict(zip(ascii_letters, range(1,53)))
 
-#part one
-# total = 0
-# for line in lines:
-# 	first = set(line[0:len(line)//2])
-# 	second = set(line[len(line)//2:-1])
-# 	intersection = first.intersection(second).pop()
-# 	total += lookup[intersection]
-# print(total)
+part one
+total = 0
+for line in lines:
+	first = set(line[0:len(line)//2])
+	second = set(line[len(line)//2:-1])
+	intersection = first.intersection(second).pop()
+	total += lookup[intersection]
+print(total)
 
 groups = list()
 group = set()
