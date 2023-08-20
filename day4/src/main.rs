@@ -10,6 +10,7 @@ struct ElfRange {
     min_right: u8,
     max_right: u8,
 }
+
 impl std::fmt::Display for ElfRange {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -19,6 +20,7 @@ impl std::fmt::Display for ElfRange {
         )
     }
 }
+
 impl FromStr for ElfRange {
     type Err = std::num::ParseIntError;
 
@@ -116,7 +118,7 @@ fn part_1() {
     println!("Total Fully Contained Ranges: {total}");
 }
 
-fn main() {
+fn part_2() {
     let elves = read_file(
         String::from_str(
             "/home/srieger/Documents/0.Projects/Programming/advent-of-code-2022/day4/input.txt",
@@ -131,6 +133,10 @@ fn main() {
         .reduce(|acc, e| acc + e)
         .unwrap();
     println!("Total Touching Ranges: {total}");
+}
+fn main() {
+    part_1();
+    part_2();
 }
 
 #[test]
@@ -219,4 +225,29 @@ fn test_read_file_part_2() {
     println!("Total Touching Ranges: {total}");
     println!("{total}");
     assert!(total == 4)
+}
+#[test]
+fn adam_thingy() {
+    //let input = "2-4,6-8\n2-3,4-5\n5-7,7-9\n2-8,3-7\n6-6,4-6\n2-6,4-8";
+    let input: String = read_to_string(
+        String::from_str(
+            "/home/srieger/Documents/0.Projects/Programming/advent-of-code-2022/day4/input.txt",
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    let mut count = 0;
+    for line in input.lines() {
+        let mut ranges = line.split(",");
+        let mut range1 = ranges.next().unwrap().split("-");
+        let mut range2 = ranges.next().unwrap().split("-");
+        let start1 = range1.next().unwrap().parse::<i32>().unwrap();
+        let end1 = range1.next().unwrap().parse::<i32>().unwrap();
+        let start2 = range2.next().unwrap().parse::<i32>().unwrap();
+        let end2 = range2.next().unwrap().parse::<i32>().unwrap();
+        if (start1 <= start2 && end1 >= end2) || (start2 <= start1 && end2 >= end1) {
+            count += 1;
+        }
+    }
+    println!("{}", count);
 }
