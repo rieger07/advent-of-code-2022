@@ -109,6 +109,28 @@ fn execute_instructions(towers: &mut Vec<Tower>, path: &String, header_len: i32)
     }
 }
 
+fn execute_instructions_CrateMover_9001(towers: &mut Vec<Tower>, path: &String, header_len: i32) {
+    //Read in the file
+    let file_read_in = read_to_string(path).unwrap();
+    //Get an iterator
+    let mut instruction_iter = file_read_in.lines().into_iter();
+
+    //Advance iterator to the line that has the start of the instructions
+    for _ in 0..header_len + 1 {
+        instruction_iter.next();
+    }
+
+    for instruction in instruction_iter {
+        let i = Instruction::from_str(instruction).ok().unwrap();
+        let mut temp_stack = Vec::<Crate>::new();
+        for _ in 0..i.amount {
+            let to_move: Crate = towers[i.from].crates.pop().unwrap();
+            temp_stack.insert(0, to_move);
+        }
+        towers[i.to].crates.append(&mut temp_stack);
+    }
+}
+
 fn main() {
     let towers = read_initial_crate_state(
         &"/home/srieger/Documents/0.Projects/Programming/advent-of-code-2022/day5/example.txt"
@@ -144,6 +166,36 @@ fn test_2() {
     let mut towers = read_initial_crate_state(&path, header_len);
 
     execute_instructions(&mut towers, &path, header_len);
+
+    for tower in towers {
+        println!("{}", tower.crates[tower.crates.len() - 1])
+    }
+}
+
+#[test]
+fn test_3() {
+    let path: String =
+        "/home/srieger/Documents/0.Projects/Programming/advent-of-code-2022/day5/example.txt"
+            .to_string();
+    let header_len = 4;
+    let mut towers = read_initial_crate_state(&path, header_len);
+
+    execute_instructions_CrateMover_9001(&mut towers, &path, header_len);
+
+    for tower in towers {
+        println!("{}", tower)
+    }
+}
+
+#[test]
+fn test_4() {
+    let path: String =
+        "/home/srieger/Documents/0.Projects/Programming/advent-of-code-2022/day5/input.txt"
+            .to_string();
+    let header_len = 9;
+    let mut towers = read_initial_crate_state(&path, header_len);
+
+    execute_instructions_CrateMover_9001(&mut towers, &path, header_len);
 
     for tower in towers {
         println!("{}", tower.crates[tower.crates.len() - 1])
